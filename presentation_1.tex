@@ -82,6 +82,13 @@
 \usepackage{algorithm,algorithmic} %pseudo
 \usepackage[italian]{babel}
 
+
+
+\graphicspath{ {./images/} } %Path delle immagini
+
+\newcommand{\bigO}{\ensuremath{\mathcal{O}}} % O assintotica
+\newcommand{\bigT}{\ensuremath{\Theta}} % Theta Assintotica
+
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -205,12 +212,61 @@ L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
 \end{algorithm}
 
 \end{frame}
+
+
+
 \subsection{Baker and Bird}
 %31
 \begin{frame}
+\frametitle{Baker and Bird}
+\begin{definition}
+	Sia $\pi$ il dizionario ottenuto da PA, $\pi= \{p_i | p_i \text{ è la } i \text{-esima colonna di PA}\}$\\
+	Sia $\mathcal{A}$ l'automa ottenuto da PA con l'algoritmo di $Aho-Corasick$\\
+	Sia $TA'$ il $text array$ ottenuto lanciando $\mathcal{A}$ su ogni colonna di TA e salvando lo stato ad ogni iterazione dell'automa
+\end{definition}
+
+\begin{itemize}
+\item Linearizzare $TA'$ ottenendo $T$
+\item Linearizzare $PA$ ottenendo $P$
+\item Usare KMP su P e T
+\item La complessità finale è  \bigO{$(mm' + nn')$} 
+\end{itemize}
 
 
 \end{frame}
+
+\begin{frame}
+\frametitle{Esempio}
+
+\begin{figure}[p]
+    \includegraphics[width=0.5\textwidth]{Baker_Bird_1.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Esempio}
+
+\begin{figure}[p]
+    \includegraphics[width=0.5\textwidth]{Baker_Bird_2.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Esempio}
+
+\begin{figure}[p]
+    \includegraphics[width=0.5\textwidth]{Baker_Bird_3.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Esempio}
+
+\begin{figure}[p]
+    \includegraphics[width=0.4\textwidth]{Baker_Bird_4.png}
+\end{figure}
+\end{frame}
+
 \subsection{Zhu and Takaoka}
 %34
 \begin{frame}
