@@ -40,7 +40,7 @@
 %\usetheme{Ilmenau}
 %\usetheme{JuanLesPins}
 %\usetheme{Luebeck}
-%\usetheme{Madrid}
+\usetheme{Madrid}
 %\usetheme{Malmoe}
 %\usetheme{Marburg}
 %\usetheme{Montpellier}
@@ -49,7 +49,7 @@
 %\usetheme{Rochester}
 %\usetheme{Singapore}
 %\usetheme{Szeged}
-\usetheme{Warsaw}
+%\usetheme{Warsaw}
 
 % As well as themes, the Beamer class has a number of color themes
 % for any slide theme. Uncomment each of these in turn to see how it
@@ -79,6 +79,9 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[utf8]{inputenc} %Accenti
+\usepackage{algorithm,algorithmic} %pseudo
+\usepackage[italian]{babel}
+
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -109,22 +112,123 @@ Università di Udine \\ % Your institution for the title page
 %	DEBUG SLIDES
 %----------------------------------------------------------------------------------------
 
-%\input{slides/argomenti.tex}
-
 \section{Lavori Precedendi}
+\begin{frame}
+\frametitle{Definizioni di Base}
+Dimensioni -> (m*m') Testo 2D; m Testo 1D\\
+(n*n') Pattern 2D -> n Pattern 1D\\
+k errori ammessi\\
+$D_H$ = hamming\\
+P = pattern\\
+T = testo\\
+\end{frame}
+\subsection{Exact vs Approximate}
 
-\subsection{Exact vs Inexact}
 %21
+\begin{frame}
+\frametitle{Exact vs Approximate}
+Il pattern matching esatto prevede di cercare l'occorrenza di una stringa all'interno di un testo.
+L'uso di automi per questo approccio è abbastanza naturale come si vede dal seguente algoritmo:\\
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+
+\STATE $\delta(q_0,a) = \{q_0\} , \forall a \in A$\\
+
+\STATE $\delta(q_0,p_1) = \{q_0,q_1\}$\\
+
+\FOR{$i=1$ to $m-1$}
+
+\STATE $\delta(q_i,p_{i+1}) = \{q_{i+1}\}$
+
+\ENDFOR
+\end{algorithmic}
+\caption{Creazione FA :: Pattern - Matching Esatto}
+\end{algorithm}
+
+L'automa risultante ha $m+1$ stati. Ogni stato $q_i$ indica che si è letto il prefisso del pattern fino all'$i$-esimo carattere
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Exact vs Approximate}
+
+Il pattern matching approsimato si basa sulla distanza di Hamming che permette di quantificare il numero di errori ammessi.
+La costruzione di tale automa prevede l'uso di $k+1$ copie di automi per il Pattern Matchin esatto, $M_0,\dots ,M_k$. \\
+L'idea è quella che ogni $M_i$ rappresenta il pattern accettato con $i$ errori.
+I vari $M_i$ sono collegati con una transizione dallo stato $q_j$ allo stato $q_{j+1}$ che corrisponde all'azione di $sostituzione$ nel calcolo della distanza di Hamming, etichettata con il simbolo $\overline{p}_{j+1}$ corrispondente al carattere complementare in posizione $j+1$ in P.\\
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Exact vs Approximate}
+\setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
+\begin{theorem}[]
+L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
+\end{theorem}
+
+%\setbeamercolor{block title}{use=structure,fg=white,bg=green!35!black}
+ % \setbeamercolor{block body}{use=structure,fg=black,bg=green!20!white}
+%\begin{proof}
+%
+%\end{proof}
+
+\end{frame}
+
 \subsection{Approximate Dictionary Matching}
 %22
+\begin{frame}
+\frametitle{Approximate Dictionary Matching}
+
+\begin{definition}
+	Sia $\pi$ un dizionario di $s$ pattern, $\pi = \{p_1,\dots,p_s\}$\\
+	Sia $m = min\{|p_1|,\dots,|p_s|\}$\\
+	Sia $k$ il numero di errori ammessi per ogni pattern, $k < m$ \\
+	L'automa $\mathcal{A}$ per l'approximate dictionary matching riconosce il linguaggio $L(\mathcal{A}) =\bigcup_{i=1}^s \{ uv | u,v\in A^*, D_H(p_i,v) \leq k, p_i\in \pi \}$
+\end{definition}
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+
+\FOR{$i=1$ to $s$}
+
+\STATE Costruisci $M_i$ con la tecnica per il pattern matching approssimato
+
+\ENDFOR
+\STATE Costruisci lo stato iniziale $q_0$
+\FOR{$i=1$ to $s$}
+\STATE Aggiungi una transizione da $q_0$ a $q_0^i$ e da $q_0$ a $q_1^i$ etichettata come la transizione $q_0^i \to q_1^i$
+\ENDFOR
+
+\end{algorithmic}
+\caption{Creazione FA :: Approximate Dictionary Matching}
+\end{algorithm}
+
+\end{frame}
 \subsection{Baker and Bird}
 %31
+\begin{frame}
+
+
+\end{frame}
 \subsection{Zhu and Takaoka}
 %34
-\subsection{Baeza Yates and Regnier}
+\begin{frame}
+
+
+\end{frame}
+\subsection{Baeza-Yates and Regnier}
 %35
+\begin{frame}
+
+
+\end{frame}
 \subsection{Strutture dati utili}
 %37
+\begin{frame}
+
+
+\end{frame}
 
 
 \section{2D con FA}
@@ -138,6 +242,10 @@ Università di Udine \\ % Your institution for the title page
 %47
 %\subsection{Pratical 2D PM con Hamming}
 %53
+\begin{frame}
+
+
+\end{frame}
 
 \section{2D con PDA}
 
@@ -147,6 +255,10 @@ Università di Udine \\ % Your institution for the title page
 
 %\subsection{Costruiamo il PDA}
 
+\begin{frame}
+
+
+\end{frame}
 
 %----------------------------------------------------------------------------------------
 %	PRESENTATION SLIDES
