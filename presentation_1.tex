@@ -222,7 +222,7 @@ L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
 \begin{definition}
 	Sia $\pi$ il dizionario ottenuto da PA, $\pi= \{p_i | p_i \text{ è la } i \text{-esima colonna di PA}\}$\\
 	Sia $\mathcal{A}$ l'automa ottenuto da PA con l'algoritmo di $Aho-Corasick$\\
-	Sia $TA'$ il $text array$ ottenuto lanciando $\mathcal{A}$ su ogni colonna di TA e salvando lo stato ad ogni iterazione dell'automa
+	Sia $TA'$ il $text array$ ottenuto lanciando $\mathcal{A}$ su ogni colonna di TA e salvando lo stato corrente della run dell'automa
 \end{definition}
 
 \begin{itemize}
@@ -270,19 +270,18 @@ L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
 \subsection{Zhu and Takaoka}
 %34
 \begin{frame}
+\frametitle{Zhu and Takaoka}
 
+Estende l'idea di Karp e Rabin alle due dimensioni usando la tecnica delle $impronte$.\\
+I passi dell'algoritmo sono:
+\begin{itemize}
+\item Genera $P'$ come array di impronte di P usando la funzione di hash per colonne
+\item Genera $T'$ nello stesso modo di $P'$ (Guardando solo $m'$ caratteri per colonna)
+\item Lancia KMP su $P'$ e$T'$ e ogni volta che trova una occorrenza esegue il controllo sulle matrici
+\item Passa alla riga successiva aggiornando $T'$
+\end{itemize}
 
-\end{frame}
-\subsection{Baeza-Yates and Regnier}
-%35
-\begin{frame}
-
-
-\end{frame}
-\subsection{Strutture dati utili}
-%37
-\begin{frame}
-
+Più il pattern ha la componente $m'$ grande, migliore è l'efficenza di questo algoritmo che, nel caso pessimo è $\bigO{(n'n + n'mm')}$
 
 \end{frame}
 
@@ -290,6 +289,22 @@ L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
 \section{2D con FA}
 %\subsection{Algo Generico}
 %40
+\begin{frame}
+\frametitle{2D Approsimato con FA :: Algoritmo Generico}
+\begin{definition}
+	Sia $\pi$ il dizionario ottenuto da PA, $\pi= \{p_i | p_i \text{ è la } i \text{-esima colonna di PA}\}$\\
+	Sia $R$ la linearizzazione di PA\\
+	Sia $M(\pi) = (Q,A,\delta,I,F)$ l'automa costruito con la tecnica per l'approximate dictionary matching\\
+\end{definition}
+\begin{itemize}
+\item Costruiamo $M(\pi)$ con $k'$ errori 
+\item Costruiamo $TA'$ ottenuto dai valori della run di $M(\pi)$ su TA
+\item Costruiamo $R$ come l'insieme degli stati finali di $M(\pi)$ che rappresentano il match esatto di PA
+\item Costruiamo $M'$ che cerca $R$ con $k$ errori (limitiamo la somma degli errori del punto 2)
+\item Lanciamo $M'$ su $TA'$ in modo che rilevi tutte le occorrenze di $R$
+\end{itemize}
+
+\end{frame}
 %\subsection{2D Esatto}
 %41
 %\subsection{BlowUp state explosion Problem}
