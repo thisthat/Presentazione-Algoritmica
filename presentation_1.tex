@@ -83,11 +83,12 @@
 \usepackage[italian]{babel}
 
 
-
 \graphicspath{ {./images/} } %Path delle immagini
 
 \newcommand{\bigO}{\ensuremath{\mathcal{O}}} % O assintotica
 \newcommand{\bigT}{\ensuremath{\Theta}} % Theta Assintotica
+
+\renewcommand{\algorithmicforall}{\textbf{foreach}} %forall -> foreach
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -472,21 +473,107 @@ Nel caso approssimato $M(\pi)$ ha più stati finali per ogni pattern $p \in \pi$
 \begin{frame}
 \frametitle{Caso Approssimato :: Costruzione di $M'$ }
 
+L'idea è quella di costruire $k$ copie dell'automa che riconosce $R$ in maniera esatta ($M_1,\dots,M_k$), dove ogni coppia è numerata e il suo indice permette di contare quanti errori sono stati compiuti.
 \begin{definition}
 Sia $M' = (Q',A',\delta',q_{0,0}', F')$ dove
 	\begin{itemize}
 		\item $A' = F \cup \{\oslash\}$
 		\item $\delta' : Q' \times (s,A') \to \mathcal{P}(Q')$
+		\item $q_{i,j}$ stato $j$-esimo dell'automa $i$-esimo
 	\end{itemize}
 \end{definition}
+
+
+
 
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Caso Approssimato :: }
+\frametitle{Caso Approssimato :: Costruzione di $M'$}
+Ogni stato $q_{i,j}$ ha una transizione verso lo stato $q_{k,j+1} (\forall k . i \leq k \leq m')$ etichettata con $(s,x)$ dove: 
+\begin{itemize}
+\item $s$ indica l'$s$-esimo carattere di $R$ riconosciuto
+\item $x$ indica il numero di errori che si commette eseguendo tale transizione
+\end{itemize}
+
+Per calcolare $x$ si utilizza la seguente funzione:
+
+\begin{equation*}
+|(s,x) - (t,y)|= 
+\begin{cases} 
+|x-y| & \text{$s = t$}
+\\
+m'  &\text{$((s,t) \vee (t,y)) = \oslash$}
+\\
+m'  &\text{$s \not= t $}
+\end{cases}
+\end{equation*}
+
 
 \end{frame}
+
+\begin{frame}
+\frametitle{Caso Approssimato :: Costruzione di $M'$}
+
+\begin{figure}[p]
+\vspace*{-3cm}
+    \includegraphics[width=0.8\textwidth]{aprox_count.pdf}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Simulazione}
+Gli automi costruiti in questi passaggi sono non deterministici, la simulazione prevede l'uso della $programmazione$ $dinamica$.\\
+Si introduce un array $E[0,\dots, m-1]$ che tiene conto del numero minimo di errori trovati.\\
+Se uno stato attivo non compie nessuna transizione al passo successivo, questa computazione viene terminata.
+\end{frame}
+
+
+\begin{frame}
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\algsetup{linenosize=\tiny}
+  \scriptsize
+\FOR{$y=m'$ to $n'$}
+\STATE $\forall q . E[q]$ inattivo
+	\FOR{$x=1$ to $n$}
+		\STATE E[0] attivo, E[0] = 0
+		\FORALL{$q$ attivo in $E$}
+			\STATE $err$ = $TA'[x,y,R[q+1]]$
+			\IF{$err = \oslash$} \STATE $err = m'$ \ENDIF
+			\STATE $err = err + E[q]$
+			\IF {$err \leq k$} 
+				\IF {$q+1 = m$} \STATE "Trovata Occorrenza"
+				\ELSE \STATE $E[q+1]$ attivo, $E[q+1] = err$
+				\ENDIF
+			\ELSE \STATE $E[q+1]$ disattivato al prossimo step
+			\ENDIF
+		\ENDFOR
+	\ENDFOR
+\ENDFOR
+
+
+\end{algorithmic}
+\caption{Simulazione}
+\end{algorithm}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusioni}
+
+\begin{itemize}
+\item $M(\pi)$ è fatto da $m$ sub-automi la cui simulazione su $TA$ richiede $m \cdot \bigO{(m'nn')}$
+\item $R$ è costruito in $\bigO{(m)}$ 
+\item La simulazione di $M'$ richiede $\bigO{(mnn' - mm'n)}$
+\end{itemize}
+La complessità totale dell'algoritmo per trovare PA in TA con $k$ errori chiede $\bigO{(mm' \cdot nn' + m +mnn' - mmn')} = \bigO{(mm' \cdot nn')}$
+
+\end{frame}
+
 \section{2D con PDA}
 
 %\subsection{Img2Tree}
