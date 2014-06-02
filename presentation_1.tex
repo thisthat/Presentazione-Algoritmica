@@ -174,6 +174,10 @@ I vari $M_i$ sono collegati con una transizione dallo stato $q_j$ allo stato $q_
 L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
 \end{theorem}
 
+\begin{figure}[p]
+    \includegraphics[scale=0.4]{approssimato.png}
+\end{figure}
+
 %\setbeamercolor{block title}{use=structure,fg=white,bg=green!35!black}
  % \setbeamercolor{block body}{use=structure,fg=black,bg=green!20!white}
 %\begin{proof}
@@ -314,8 +318,114 @@ Più il pattern ha la componente $m'$ grande, migliore è l'efficenza di questo 
 %\subsection{Pratical 2D PM con Hamming}
 %53
 \begin{frame}
+\frametitle{Caso Esatto :: Costruzione $M(\pi)$}
+
+$M(\pi)$ riconosce il linguaggio $L = A*E(\pi)$ con $E(\pi) = \{ P \in A^{m'} ; P \in \pi   \}$\\
+La costruzione di tale automa consiste in un $Trie$ con un self loop sullo stato iniziale etichettato con $A$ e $m$ transizioni verso gli automi per i singoli pattern.
+
+\begin{figure}[p]
+    \includegraphics[width=0.8\textwidth]{exact2D.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Caso Esatto :: Costruzione $M(\pi)$}
+
+\setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
+\begin{theorem}[]
+L'automa ha al più uno stato finale attivo dopo aver letto un carattere d'input.
+\end{theorem}
 
 
+\setbeamercolor{block title}{use=structure,fg=white,bg=green!35!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=green!20!white}
+\begin{proof}
+Siccome $\pi$ è un insieme, non esistono duplicati di una stringa.\\
+Visto che ogni stringa all'interno di $\pi$ ha la stessa lunghezza, dopo ogni step dell'automa solo, al più, uno stato finale può essere attivo.
+\end{proof}
+Questo teorema vale grazie a come viene eseguita la simulazione di $M(\pi)$.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Caso Esatto :: Costruzione $TA'$}
+Grazie al teorema precedente possiamo costruire $TA'$ usando la seguente formula:
+\begin{equation*}
+\forall  i,j\ 1\leq i \leq n, 1 \leq j \leq n'\
+TA'[i,j]= 
+\begin{cases} q & \text{se $q\in F$}
+\\
+0 &\text{se $q \not\in F$}
+\end{cases}
+\end{equation*}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Caso Esatto :: Costruzione $R$}
+La stringa $R$ è ottenuta linearizzando PA grazie all'automa $M(\pi)$ costruito in precedenza.\\
+L'$i$-esimo carattere di $R$ è ottenuto leggendo lo stato finale di $M(\pi)$ su input PA[$i$]. \\
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Caso Esatto :: Costruzione $M'$}
+Costruiamo l'automa $M'$ con il solito algoritmo sull'alfabeto $F \cup \{0\}$ che riconosca il linguaggio $L(M') = (F \cup \{0\}) * E(R)$ dove $E(R) =  \{R\ |\ R \in F^m\} $, $F = \{s1,\dots,s_{|\pi|}\}$, $|F| = |\pi|$.
+\begin{figure}[p]
+    \includegraphics[width=0.8\textwidth]{exact2D_m1.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Caso Esatto :: Conclusioni}
+\begin{itemize}
+\item Tutti gli automi presentati sono non deterministici
+\item Bisogna utilizzare una simulazione per non dover determinizzare gli automi
+\item Opera in tempo lineare: $\bigO{(mm'+nn')}$
+	\begin{itemize}
+	\item $\bigO{(mm')}$ per $M(\pi)$
+	\item $\bigO{(nn')}$ per $TA'$
+	\item $\bigO{(m)}$ per $R$ ed $M'$
+	\item $\bigO{(nn')}$ per il pattern matching
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Caso Approssimato}
+Dobbiamo modificare $M(\pi)$ in modo che accetti il linguaggio $L(M) = A * H_k(\pi)$ dove: $H_k(\pi) = \{X\ |\ X \in A^*, D_H(X,P) \leq min(k,m'-1) \wedge P\in \pi \}$\\
+Dobbiamo usare il minimo perchè $k$ potrebbe essere più grande della dimensione di una colonna/righa.\\
+Bisogna costruire l'automa per l'Approximate Dictionary Matching con l'algoritmo visto in precedenza con una modifica, gli stati finali sono etichettati con copie $(s,x)$ dove:
+\begin{itemize}
+\item $s$ = l'indice del pattern riconosciuto
+\item $x$ = il numero di errori con il quale viene riconosciuto
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{I singoli automi del ADM}
+\begin{figure}[p]
+    \includegraphics[width=1\textwidth]{ADM.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Caso Approssimato}
+\setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
+  \begin{theorem}[]
+  L'automa per il ha $|\pi|(k+1)(m+1 - k/2)$ stati
+  \end{theorem}
+\begin{theorem}[]
+L'automa potrebbe avere più di uno stato finale attivo dopo aver letto un carattere d'input.
+\end{theorem}
 \end{frame}
 
 \section{2D con PDA}
