@@ -417,17 +417,76 @@ Bisogna costruire l'automa per l'Approximate Dictionary Matching con l'algoritmo
 \end{frame}
 
 \begin{frame}
+
+\begin{definition}
+$k' = min(k, m'-1)$
+\end{definition}
+
 \frametitle{Caso Approssimato}
 \setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
   \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
   \begin{theorem}[]
-  L'automa per il ha $|\pi|(k+1)(m+1 - k/2)$ stati
+  L'automa per il ha $|\pi|(k'+1)(m+1 - k'/2)$ stati di cui $|\pi|(k'+1)$ finali
   \end{theorem}
 \begin{theorem}[]
 L'automa potrebbe avere più di uno stato finale attivo dopo aver letto un carattere d'input.
 \end{theorem}
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Caso Approssimato :: Costruzione $TA'$}
+Dobbiamo estendere $TA'$ ad un array tridimensionale in quanto più pattern allo stesso istante potrebbero venire riconosciuti.\\
+\begin{definition}
+Sia $\oslash \not\in Q$ un simbolo nuovo che non appare negli stati e nelle label. \\
+$\oslash$ viene usato per indicare che nessun pattern è trovato in una data posizione
+\end{definition}
+
+\begin{equation*}
+\forall  i,j,s\ 1\leq i \leq n, 1 \leq j \leq n',1 \leq s \leq |\pi|
+\end{equation*}
+\begin{equation*}
+TA'[i,j,s]= 
+\begin{cases} 
+x & \text{se $q$ attivo, $q\in F, q = (s,x)$}
+\\
+\oslash  &\text{altrimenti}
+\end{cases}
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Caso Approssimato :: Costruzione R}
+
+Per costruire $R$ a partire da $PA$ vorremmo usare lo stesso algoritmo visto per il caso esatto.\\
+Nel caso approssimato $M(\pi)$ ha più stati finali per ogni pattern $p \in \pi$, bisogna quindi apportare i seguenti aggiustamenti:
+\begin{itemize}
+\item Per ogni sottoautoma $M_i$ di $M(\pi)$ viene selezionato (arbritariamente) uno stato finale
+\item Lo stato finale scelto è della forma (s,x) e per costruire $R$ guardiamo solo alla componente $s$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Caso Approssimato :: Costruzione di $M'$ }
+
+\begin{definition}
+Sia $M' = (Q',A',\delta',q_{0,0}', F')$ dove
+	\begin{itemize}
+		\item $A' = F \cup \{\oslash\}$
+		\item $\delta' : Q' \times (s,A') \to \mathcal{P}(Q')$
+	\end{itemize}
+\end{definition}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Caso Approssimato :: }
+
+\end{frame}
 \section{2D con PDA}
 
 %\subsection{Img2Tree}
