@@ -81,7 +81,7 @@
 \usepackage[utf8]{inputenc} %Accenti
 \usepackage{algorithm,algorithmic} %pseudo
 \usepackage[italian]{babel}
-
+\usepackage{amsmath}
 
 \graphicspath{ {./images/} } %Path delle immagini
 
@@ -491,10 +491,10 @@ Sia $M' = (Q',A',\delta',q_{0,0}', F')$ dove
 
 \begin{frame}
 \frametitle{Caso Approssimato :: Costruzione di $M'$}
-Ogni stato $q_{i,j}$ ha una transizione verso lo stato $q_{k,j+1} (\forall k . i \leq k \leq m')$ etichettata con $(s,x)$ dove: 
+Ogni stato $q_{i,j}$ ha una transizione verso lo stato $q_{k,j+1} (\forall k . i \leq k \leq m')$ etichettata con $(p,z)$ dove: 
 \begin{itemize}
-\item $s$ indica l'$s$-esimo carattere di $R$ riconosciuto
-\item $x$ indica il numero di errori che si commette eseguendo tale transizione
+\item $p$ indica l'$p$-esimo carattere di $R$ riconosciuto
+\item $z$ indica il numero di errori che si commette eseguendo tale transizione
 \end{itemize}
 
 Per calcolare $x$ si utilizza la seguente funzione:
@@ -583,9 +583,121 @@ La complessità totale dell'algoritmo per trovare PA in TA con $k$ errori chiede
 %\subsection{Costruiamo il PDA}
 
 \begin{frame}
+\frametitle{Matrice Estesa}
+
+\begin{definition}
+Definiamo $A_\# = A \cup\{\#\}$ con $\#$ che non appare in $A$\\
+Sia $M \in A^{(n\times n')}$, definiamo la matrice estesa $M' \in A_\# ^{(n+1 \times n'+1)}$ come $M$ con una nuova riga e colonna riempite con il carattere $\#$
+\end{definition}
+
+\[
+  M = \begin{tabular} {|c|c|c|}
+  	\hline
+  		a & c & f  \\ 
+  		\hline
+  		b & e & h \\
+  		\hline
+  		d & g & i \\
+  		\hline 
+  \end{tabular} 
+  \to M' = 
+ \begin{array} {|c|c|c|c|}
+ \hline
+   		a & c & f & \# \\ 
+   		\hline
+   		b & e & h & \# \\
+   		\hline
+   		d & g & i  & \# \\
+   		\hline
+   		\# & \# & \# & \#\\
+		\hline
+   \end{array} 
+\]
 
 
 \end{frame}
+
+\begin{frame}
+\frametitle{Da matrice a DAG}
+
+Dalla matrice $M'$ estesa possiamo creare un $DAG$ seguento le seguenti regole:
+\begin{itemize}
+\item La radice è in $M'[1,1] = M[1,1]$
+\item Ogni nodo interno è formato dai valori di $M$
+\item I caratteri $\# $ sono tutte foglie
+\item Se un nodo $M'[i,j]$ è interno, allora ha due figli: $M'[i+1,j]$ e $M'[i,j+1]$
+\end{itemize}
+
+\begin{figure}[p]
+    \includegraphics[width=0.5\textwidth]{dag.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Da DAG ad Albero}
+La radice dell'albero è la radice del DAG.\\
+In ricorsione si vedono i figli di un nodo e li si copiano nell'albero. Terminiamo quando arriviamo al nodo $\#$
+\begin{figure}[p]
+    \includegraphics[width=1\textwidth]{tree.png}
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Da Matrice ad Alberi}
+Possiamo costruire direttamente l'albero a partire dalla matrice.\\
+La struttura di DAG è mantenuta implicitamente.\\
+\fontsize{10pt}{7.2}\selectfont
+\[
+	tree(M,x,y) = \begin{cases}
+		(M[x,y], tree(M,x,y+1) , tree(M,x+1,y) ) & \text{Se $M[x,y] \not = \#$ }\\
+		(M[x,y], null, null) & \text{Altrimenti}
+	\end{cases}
+\]
+\fontsize{12pt}{7.2}\selectfont
+\begin{definition}
+Gli elementi della matrice che vengono visti più di una volta sono detti $splitting$ $nodes$.\\
+$pref(t)$ è la visita in preorder con la stampa delle label dei nodi.
+\end{definition}
+\end{frame}
+
+\begin{frame}
+\frametitle{Da Matrice ad Alberi}
+\setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
+\begin{theorem}[]
+Sia $t$ ottenuto da $tree(M',1,1)$. La profondità massima di un nodo in $t$, $depth(t)$ è $depth(t) = n + n' -1$. 
+\end{theorem}
+
+
+\setbeamercolor{block title}{use=structure,fg=white,bg=green!35!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=green!20!white}
+\begin{proof}
+Il percorso più lungo in $t$ è quello che percorre $n -1$ nodi che non sono di $splitting$ e $n$ $splitting$ nodes.
+\end{proof}
+
+\frametitle{Da Matrice ad Alberi}
+\setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
+\begin{theorem}[]
+La costruzione dell'albero ha complessità $\bigO{(2^{depth(t)})}$
+\end{theorem}
+
+
+\setbeamercolor{block title}{use=structure,fg=white,bg=green!35!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=green!20!white}
+\begin{proof}
+In un albero binario completo il numero di nodi è $2^{depth(t)-1} + 2^{depth(t)} = \bigO{(2^{depth(t)})}$. 
+\end{proof}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{ }
+
+\end{frame}
+
 
 %----------------------------------------------------------------------------------------
 %	PRESENTATION SLIDES
