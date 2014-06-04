@@ -292,6 +292,12 @@ Più il pattern ha la componente $m'$ grande, migliore è l'efficenza di questo 
 
 
 \section{2D con FA}
+
+\begin{frame}
+\frametitle{2D con Finite Automata}
+\Huge{\centerline{2D con Finite Automat}}
+\end{frame}
+
 %\subsection{Algo Generico}
 %40
 \begin{frame}
@@ -575,7 +581,10 @@ La complessità totale dell'algoritmo per trovare PA in TA con $k$ errori chiede
 \end{frame}
 
 \section{2D con PDA}
-
+\begin{frame}
+\frametitle{2D con PushDown Automata}
+\Huge{\centerline{2D con PushDown Automata}}
+\end{frame}
 %\subsection{Img2Tree}
 
 %\subsection{Indexing per space efficent}
@@ -660,6 +669,15 @@ La struttura di DAG è mantenuta implicitamente.\\
 Gli elementi della matrice che vengono visti più di una volta sono detti $splitting$ $nodes$.\\
 $pref(t)$ è la visita in preorder con la stampa delle label dei nodi.
 \end{definition}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Index-Tree :: Da Alberi a DAG}
+Notiamo che sottoalberi sono ripetuti più volte, possiamo allora eseguire una facile ottimizzazione.
+\begin{figure}[p]
+    \includegraphics[width=1\textwidth]{index.png}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -692,10 +710,195 @@ In un albero binario completo il numero di nodi è $2^{depth(t)-1} + 2^{depth(t)
 \end{proof}
 \end{frame}
 
+\begin{frame}
+\frametitle{Algoritmo Generico}
+\begin{itemize}
+\item Estendiamo il testo 2D e il pattern 2D 
+\item \textbf{Costruiamo l'index del testo 2D come un PDA}
+\item Costruiamo l'albero per il pattern 2D
+\item \textbf{Linearizziamo il pattern calcolando $pref$ dell'albero}
+\item \textbf{Cerchiamo il $pref$ del pattern con il PDA costruito al passo precedente}
+\end{itemize}
+\end{frame}
 
 \begin{frame}
-\frametitle{ }
+\frametitle{Algoritmo per la costruzione del PDA}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $\delta = \emptyset, Q = \emptyset, G = \{S\}$
+	\STATE $G = G \cup \{S_{x+1,y}\}$ $\forall x,y\ 1\leq x < n \wedge 1 \leq y < n'$
+	\STATE crea\_nodi()
+	\STATE crea\_transizioni\_base()
+	\STATE crea\_transizioni\_sharp()
+	\STATE crea\_transizioni\_bottom()
+	\STATE crea\_transizioni\_right()
+	\STATE crea\_transizioni\_suffix()
+	\STATE crea\_transizioni\_prefix()
+\end{algorithmic}
+\caption{Costruzione del PDA $\mathcal{M} = (Q,A_\#,G,\delta,q_{1,1},S,\emptyset)$}
+\end{algorithm}
 
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo per la costruzione del PDA}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $Q = Q \cup \{Q_{x,y}\}\ \forall x,y\ 1 \leq x \leq n+1,1\leq y \leq n'+1$ e $y<n' \vee x < n$
+\end{algorithmic}
+\caption{crea\_nodi()}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $\delta(q_{x,y},TA[x,y],S) = \delta(q_{x,y},TA[x,y],S) \cup \{(q_{x,y+1},S_{x+1,y}S)\}$
+	\STATE $\forall x,y\ 1\leq x < n, 1\leq y < n'$
+\end{algorithmic}
+\caption{crea\_transizioni\_base()}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $\delta(Q_{n,y},\#,S) = \delta(q_{n,y},\#,S) \cup \{(q_{n+1,y},\epsilon)\}\ \forall y 1 \leq y < n'$
+	\STATE $\delta(Q_{x,n'},\#,S) = \delta(q_{x,n'},\#,S) \cup \{(q_{x,n'+1},\epsilon)\}\ \forall x 1 \leq y < n$
+\end{algorithmic}
+\caption{crea\_transizioni\_sharp()}
+\end{algorithm}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{crea\_nodi + crea\_transizioni\_base + crea\_transizioni\_sharp}
+\begin{figure}[p]
+    \includegraphics[width=1\textwidth]{pda_1.png}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Algoritmo per la costruzione del PDA}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $\delta(q_{x,n'+1},\epsilon,S_{x+1,y}) = \delta(q_{x,n'+1},\epsilon,S_{x+1,y}) \cup \{(q_{x+1,y},S)\}$
+	\STATE  $\forall x,y$ $1 \leq x < n, 1\leq y < n'$
+\end{algorithmic}
+\caption{crea\_transizioni\_bottom()}
+\end{algorithm}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{crea\_nodi + crea\_transizioni\_bottom}
+\begin{figure}[p]
+    \includegraphics[width=1\textwidth]{pda_2.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo per la costruzione del PDA}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $\delta(q_{n+1,y},\epsilon,S_{x,y-1}) = \delta(q_{n+1,y},\epsilon,S_{x,y-1}) \cup \{(q_{x,y-1},S)\}$
+	\STATE  $\forall x,y$ $2 \leq x \leq n, 2\leq y < n'$
+\end{algorithmic}
+\caption{crea\_transizioni\_right()}
+\end{algorithm}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{crea\_nodi + crea\_transizioni\_right}
+\begin{figure}[p]
+    \includegraphics[width=1\textwidth]{pda_3.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{nodi + basic + sharp + bottom + right}
+\begin{figure}[p]
+\vspace*{-0.35cm}
+    \includegraphics[width=0.95\textwidth]{pda_4.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algoritmo per la costruzione del PDA}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $\delta(q_{1,1},TA[x,y],S) = \delta(q_{1,1},TA[x,y],S) \cup \{(q_{x,y+1},S_{x+1,y}S)\}$
+	\STATE  $\forall x,y$ $1 \leq x < n, 1\leq y < n'$ e $x > 1 \vee y > 1$
+\end{algorithmic}
+\caption{crea\_transizioni\_suffix()}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+	\STATE $\delta(q_{x,y},\#,S) = \delta(q_{x,y},\#,S) \cup \{(q_{n+1,y},\epsilon)\}$
+	\STATE  $\forall x,y$ $1 \leq x < n, 1\leq y < n'$ e $x \not= 1 \vee y \not= 1$
+\end{algorithmic}
+\caption{crea\_transizioni\_prefix()}
+\end{algorithm}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{nodi + suffix}
+\begin{figure}[p]
+
+    \includegraphics[width=0.95\textwidth]{pda_suf.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{nodi + prefix}
+\begin{figure}[p]
+    \includegraphics[width=0.85\textwidth]{pda_pre.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dimostrazione correttezza}
+
+\setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
+  \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
+\begin{theorem}[]
+Sia TA un testo 2D esteso. Il PDA $\mathcal{M}$ costruito da TA accetta tutti i $pref(F)$ con $F$ un fattore di TA. Quindi $\mathcal{M}$ accetta ogni $pref(TA[i..k,j..l]')$ con $1 \leq i \leq k \leq n, 1 \leq j \leq l \leq n'$
+\end{theorem}
+
+
+Dimostriamo per induzione sull'altezza dell'albero $t$ costruito con $tree(F,1,1)$:
+\begin{itemize}
+\item $F$ ha un solo elemento, $TA[i,j]$. $t$ ha altezza $1$ e $pref(t) = TA[i,j]\#\#$.\\
+Per mezzo delle transizioni suffix: $(q_{i,j+1},S_{i+1,j}S) \in \delta(q_{1,1},TA[i,j],S)$\\
+Quindi il PDA evolve nel seguente modo:\\
+$(q_{1,1},TA[i,j]\#\#,S) \vdash_\mathcal{M}^+ (q_{n+1,j},\epsilon,\epsilon)$
+
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Dimostrazione correttezza}
+
+\begin{itemize}
+\item Assumiamo valga per $F_b = TA[i..k,j+1..l]$ e $F_r = TA[i+1..k,j..l]$. Sia $t_b = tree(F_b)$ e $t_r = tree(F_r)$ con $height(t_b) \leq m \wedge height(t_r) \leq m, m \geq 1$. Dimostriamo che vale anche per $t = TA[i,j]pref(t_b)pref(t_r), height(t) \geq m+1$\\
+$(q_{1,1},TA[i,j]pref(t_b)pref(t_r),S) \vdash_\mathcal{M} $     \tiny{\%Leggiamo il primo carattere}\normalsize\\ %Leggiamo il primo carattere
+
+$(q_{i,j+1},pref(t_b)pref(t_r),S_{i+1,j}S) \vdash_\mathcal{M}^+ $    \tiny{\%Per ip. Induttiva}\normalsize\\ %Ipotesi induttiva
+$(q_{n+1,j+1},pref(t_r),S_{i+1,j}) \vdash_\mathcal{M} $                   \tiny{\%Transizioni Right}\normalsize\\ %Suffix 
+$(q_{i+1,j},pref(t_r),S) \vdash_\mathcal{M}^+ $                               \tiny{\%Per ip. Induttiva}\normalsize\\ %Ipotesi induttiva
+$(q_{n+1,j},\epsilon,\epsilon)$.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{$\ $}
+\Huge{\centerline{Fine}}
 \end{frame}
 
 
@@ -845,7 +1048,7 @@ In un albero binario completo il numero di nodi è $2^{depth(t)-1} + 2^{depth(t)
 %%------------------------------------------------
 %
 %\begin{frame}
-%\Huge{\centerline{The End}}
+%v
 %\end{frame}
 %
 %%----------------------------------------------------------------------------------------
