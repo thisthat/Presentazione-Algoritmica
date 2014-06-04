@@ -123,13 +123,31 @@ Università di Udine \\ % Your institution for the title page
 \section{Lavori Precedendi}
 \begin{frame}
 \frametitle{Definizioni di Base}
-Dimensioni -> (m*m') Testo 2D; m Testo 1D\\
-(n*n') Pattern 2D -> n Pattern 1D\\
-k errori ammessi\\
-$D_H$ = hamming\\
-P = pattern\\
-T = testo\\
+
+\begin{definition}
+\begin{itemize}
+	\item $P$ viene usato per indicare un pattern unidimensionale di lunghezza $m$
+	\item $T$ viene usato per indicare un testo unidimensionale di lunghezza $n$
+	\item $PA$ viene usato per indicare un pattern bidimensionale di lunghezza $m\times m'$			\item $TA$ viene usato per indicare un testo bidimensionale di lunghezza $n \times n'$
+	\item $D_H(x,y)$ è la funzione che calcola la distanza di hamming tra $x$ ed $y$
+	\item $k$ viene usato per indicare il numero massimo di errorri ammessi
+\end{itemize}	
+\end{definition}
 \end{frame}
+
+\begin{frame}
+\frametitle{Definizioni di Base}
+\begin{figure}[p]
+    \includegraphics[width=0.6\textwidth]{def.png}
+\end{figure}
+\begin{definition}
+	\begin{itemize}
+		\item $F$ è un fattore 
+		\item $R$ è l'array di contenimento (minimo), così come $Q$
+	\end{itemize}	
+\end{definition}
+\end{frame}
+
 \subsection{Exact vs Approximate}
 
 %21
