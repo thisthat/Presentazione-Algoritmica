@@ -160,11 +160,11 @@ L'uso di automi per questo approccio è abbastanza naturale come si vede dal seg
 
 \STATE $\delta(q_0,a) = \{q_0\} , \forall a \in A$\\
 
-\STATE $\delta(q_0,p_1) = \{q_0,q_1\}$\\
+%\STATE $\delta(q_0,p_1) = \{q_0,q_1\}$\\
 
-\FOR{$i=1$ to $m-1$}
+\FOR{$i=0$ to $m$}
 
-\STATE $\delta(q_i,p_{i+1}) = \{q_{i+1}\}$
+\STATE $\delta(q_i,p_{i}) = \{q_{i+1}\}$
 
 \ENDFOR
 \end{algorithmic}
@@ -219,15 +219,17 @@ L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
 
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
-
+\algsetup{linenosize=\tiny}
+  \scriptsize
 \FOR{$i=1$ to $s$}
 
 \STATE Costruisci $M_i$ con la tecnica per il pattern matching approssimato
 
 \ENDFOR
 \STATE Costruisci lo stato iniziale $q_0$
+\STATE $\delta(q_o,a) = \{q_0^i\} \forall a\in A, \forall i \in \{0,\dots,s\}$
 \FOR{$i=1$ to $s$}
-\STATE Aggiungi una transizione da $q_0$ a $q_0^i$ e da $q_0$ a $q_1^i$ etichettata come la transizione $q_0^i \to q_1^i$
+\STATE Aggiungi una transizione da  $q_0$ a $q_1^i$ etichettata come la transizione $q_0^i \to q_1^i$
 \ENDFOR
 
 \end{algorithmic}
@@ -304,7 +306,7 @@ I passi dell'algoritmo sono:
 \item Passa alla riga successiva aggiornando $T'$
 \end{itemize}
 
-Più il pattern ha la componente $m'$ grande, migliore è l'efficenza di questo algoritmo che, nel caso pessimo è $\bigO{(n'n + n'mm')}$
+Nel caso pessimo la complessità è $\bigO{(n'n + n'mm')}$
 
 \end{frame}
 
@@ -313,7 +315,7 @@ Più il pattern ha la componente $m'$ grande, migliore è l'efficenza di questo 
 
 \begin{frame}
 \frametitle{2D con Finite Automata}
-\Huge{\centerline{2D con Finite Automat}}
+\Huge{\centerline{2D con Finite Automata}}
 \end{frame}
 
 %\subsection{Algo Generico}
@@ -329,7 +331,7 @@ Più il pattern ha la componente $m'$ grande, migliore è l'efficenza di questo 
 \item Costruiamo $M(\pi)$ con $k'$ errori 
 \item Costruiamo $TA'$ ottenuto dai valori della run di $M(\pi)$ su TA
 \item Costruiamo $R$ come l'insieme degli stati finali di $M(\pi)$ che rappresentano il match esatto di PA
-\item Costruiamo $M'$ che cerca $R$ con $k$ errori (limitiamo la somma degli errori del punto 2)
+\item Costruiamo $M'$ che cerca $R$ con $k$ errori (limitiamo la somma degli errori del punto 1)
 \item Lanciamo $M'$ su $TA'$ in modo che rilevi tutte le occorrenze di $R$
 \end{itemize}
 
@@ -451,7 +453,7 @@ $k' = min(k, m'-1)$
 \setbeamercolor{block title}{use=structure,fg=white,bg=red!75!black}
   \setbeamercolor{block body}{use=structure,fg=black,bg=red!20!white}
   \begin{theorem}[]
-  L'automa per il ha $|\pi|(k'+1)(m+1 - k'/2)$ stati di cui $|\pi|(k'+1)$ finali
+  L'automa ha $|\pi|(k'+1)(m+1 - k'/2)$ stati di cui $|\pi|(k'+1)$ finali
   \end{theorem}
 \begin{theorem}[]
 L'automa potrebbe avere più di uno stato finale attivo dopo aver letto un carattere d'input.
@@ -473,7 +475,7 @@ $\oslash$ viene usato per indicare che nessun pattern è trovato in una data pos
 \begin{equation*}
 TA'[i,j,s]= 
 \begin{cases} 
-x & \text{se $q$ attivo, $q\in F, q = (s,x)$}
+x & \text{se $\exists q$ attivo, $q\in F, q = (s,x)$}
 \\
 \oslash  &\text{altrimenti}
 \end{cases}
@@ -502,7 +504,7 @@ L'idea è quella di costruire $k$ copie dell'automa che riconosce $R$ in maniera
 Sia $M' = (Q',A',\delta',q_{0,0}', F')$ dove
 	\begin{itemize}
 		\item $A' = F \cup \{\oslash\}$
-		\item $\delta' : Q' \times (s,A') \to \mathcal{P}(Q')$
+		\item $\delta' : Q' \times A' \to \mathcal{P}(Q')$
 		\item $q_{i,j}$ stato $j$-esimo dell'automa $i$-esimo
 	\end{itemize}
 \end{definition}
@@ -521,7 +523,7 @@ Ogni stato $q_{i,j}$ ha una transizione verso lo stato $q_{k,j+1} (\forall k . i
 \item $z$ indica il numero di errori che si commette eseguendo tale transizione
 \end{itemize}
 
-Per calcolare $x$ si utilizza la seguente funzione:
+Per calcolare $z$ si utilizza la seguente funzione:
 
 \begin{equation*}
 |(s,x) - (t,y)|= 
@@ -581,7 +583,7 @@ Se uno stato attivo non compie nessuna transizione al passo successivo, questa c
 
 
 \end{algorithmic}
-\caption{Simulazione}
+\caption{Simulazione di $M'$ su $TA'$}
 \end{algorithm}
 
 \end{frame}
