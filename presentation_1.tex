@@ -300,8 +300,8 @@ L'automa per il Pattern Matching approsimato ha $(k+1)(m+1 - k/2)$ stati
 Estende l'idea di Karp e Rabin alle due dimensioni usando la tecnica delle $impronte$.\\
 I passi dell'algoritmo sono:
 \begin{itemize}
-\item Genera $P'$ come array di impronte di P usando la funzione di hash per colonne
-\item Genera $T'$ nello stesso modo di $P'$ (Guardando solo $m'$ caratteri per colonna)
+\item Genera $P'$ come array di impronte di PA usando la funzione di hash per colonne
+\item Genera $T'$ nello stesso modo di $P'$ (Guardando solo $m'$ caratteri per colonna di TA)
 \item Lancia KMP su $P'$ e$T'$ e ogni volta che trova una occorrenza esegue il controllo sulle matrici
 \item Passa alla riga successiva aggiornando $T'$
 \end{itemize}
@@ -499,7 +499,7 @@ Nel caso approssimato $M(\pi)$ ha più stati finali per ogni pattern $p \in \pi$
 \begin{frame}
 \frametitle{Caso Approssimato :: Costruzione di $M'$ }
 
-L'idea è quella di costruire $k$ copie dell'automa che riconosce $R$ in maniera esatta ($M_1,\dots,M_k$), dove ogni coppia è numerata e il suo indice permette di contare quanti errori sono stati compiuti.
+L'idea è quella di costruire $k+1$ copie dell'automa che riconosce $R$ in maniera esatta ($M_0,\dots,M_k$), dove ogni coppia è numerata e il suo indice permette di contare quanti errori sono stati compiuti.
 \begin{definition}
 Sia $M' = (Q',A',\delta',q_{0,0}', F')$ dove
 	\begin{itemize}
