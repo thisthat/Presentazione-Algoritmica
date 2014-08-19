@@ -1,0 +1,20 @@
+\beamer@endinputifotherversion {3.33pt}
+\select@language {italian}
+\select@language {italian}
+\beamer@sectionintoc {1}{Introduzione}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Memoria Condivisa}{3}{0}{1}
+\beamer@subsectionintoc {1}{2}{Principio di Brent}{3}{0}{1}
+\beamer@sectionintoc {2}{Modello $PRAM$}{3}{0}{2}
+\beamer@subsectionintoc {2}{1}{Estensione $RAM$}{3}{0}{2}
+\beamer@subsectionintoc {2}{2}{Tipologie e Ugualianze}{3}{0}{2}
+\beamer@subsectionintoc {2}{3}{Algoritmo Ottimale}{3}{0}{2}
+\beamer@sectionintoc {3}{Modello Circuiti}{3}{0}{3}
+\beamer@subsectionintoc {3}{1}{Definizioni}{3}{0}{3}
+\beamer@subsectionintoc {3}{2}{Relazioni con $PRAM$}{3}{0}{3}
+\beamer@subsectionintoc {3}{3}{Classe $NC$}{3}{0}{3}
+\beamer@subsectionintoc {3}{4}{SottoClassi $NC^k$}{3}{0}{3}
+\beamer@sectionintoc {4}{Macchine di Turing Alternate}{3}{0}{4}
+\beamer@sectionintoc {5}{Problemi}{3}{0}{5}
+\beamer@subsectionintoc {5}{1}{Matrix Multiplication}{3}{0}{5}
+\beamer@subsectionintoc {5}{2}{Reachability}{3}{0}{5}
+\beamer@subsectionintoc {5}{3}{Prefix Sum}{3}{0}{5}
