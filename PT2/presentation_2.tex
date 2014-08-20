@@ -82,11 +82,13 @@
 \usepackage{algorithm,algorithmic} %pseudo
 \usepackage[italian]{babel}
 \usepackage{amsmath}
+\usepackage{mathtools}
 
 \graphicspath{ {./images/} } %Path delle immagini
 
 \newcommand{\bigO}{\ensuremath{\mathcal{O}}} % O assintotica
 \newcommand{\bigT}{\ensuremath{\Theta}} % Theta Assintotica
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil} % Ceil
 
 \renewcommand{\algorithmicforall}{\textbf{foreach}} %forall -> foreach
 
@@ -120,13 +122,84 @@ Università di Udine \\ % Your institution for the title page
 %	DEBUG SLIDES
 %----------------------------------------------------------------------------------------
 \section{Introduzione}
-\subsection{Memoria Condivisa}
+
+\begin{frame}
+	\frametitle{Introduzione} % Table of contents slide, comment this block out to remove it
+	Vari modelli di calcolo, si differenziano sul livello di astrazione dal modello reale
+	\begin{itemize}
+		\item $VLSI$: Attenzione ai limiti fisici dei processori
+		\item $PRAM$: Modello teorico non implementabile che non considera i problemi di comunicazione
+	\end{itemize}
+\end{frame}
+
+
 \subsection{Principio di Brent}
+\begin{frame}
+	\frametitle{Principio di Brent} % Table of contents slide, comment this block out to remove it
+	Abbiamo una computazione parallela eseguita in $t$ passi.
+	\begin{itemize}
+		\item Supponiamo di avere $x_i$ operazioni ad ogni passo $i$
+		\item Il numero di processori necessario è $d = max\ x_i$
+		\item Possediamo solo $p<m$ processori
+		\item Possiamo simulare la computazione originaria con $p$ processori in $\ceil{x_i / p}$ passi ad ogni $i$-esimo step
+		\item In totale la simulazione viene eseguita in $\ceil{ \frac{\sum_i x_i}{p}    } + t$ passi
+	\end{itemize}
+\end{frame}
+
 
 \section{Modello $PRAM$}
-\subsection{Estensione $RAM$}
+\begin{frame}
+	\frametitle{Parallel Random-Access Machine} % Table of contents slide, comment this block out to remove it
+	\begin{itemize}
+		\item Si basa sul modello delle $RAM$ introducendo una memoria globale (\emph{registro accumulatore}) dove le varie $RAM$ possono comunicare
+		\item In tempo $\bigO{(1)}$ possiamo r/w una cella della memoria locale o globale oppure eseguire una operazione $RAM$
+	\end{itemize}
+	Un programma $PRAM$ $\mathbb{P} = (\Pi_1,\dots,\Pi_q)$ è fatto da $q$ macchine $RAM$ indipendenti dove $q$ è una funzione $q(m,n)$ dove $m = |I|$ ed $n= \ell(I)$.\\
+	Normalmente il numero di $RAM$ richiesto dipende solo da $m$.
+\end{frame}
+
 \subsection{Tipologie e Ugualianze}
+\begin{frame}
+	\frametitle{Parallel Random-Access Machine :: Tipologie e Ugualianze} % Table of contents slide, comment this block out to remove it
+	In base a come gestiamo i conflitti di r/w sul registro accumulatore abbiamo 3 diverse tipologie di PRAM
+	\begin{itemize}
+		\item Exclusive-Read Exclusive-Write ($EREW$) 
+		\item Concurrent-Read Exclusive-Write ($CREW$)
+		\item Concurrent-Read Concurrent-Write ($CRCW$)
+	\end{itemize}
+	Per risolvere i conflitti di scrittura abbiamo 3 metodi:
+	\begin{itemize}
+		\item $Common$: Tutti i processi che insistono in una stessa locazione devono scrivere lo stesso valore 
+		\item $Arbritary$: Tra tutti i processi che provano a scrivere, solo uno ha successo. L'algoritmo deve comunque funzionare a prescindere da chi vince
+		\item $Priority$: Il processo l'identificativo più basso è quello che scrive
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Parallel Random-Access Machine :: Tipologie e Ugualianze} % Table of contents slide, comment this block out to remove it
+	L'ordine con il quale sono state presentate è anche l'ordine di potenza dei vari modelli.\\
+	Tra loro però sono correlati da un fattore logaritmico. Per cui il modello più potente, $CRCW\ Priority$ può essere simulato da una $EREW$ con lo stesso numero di processori e con un tempo parallelo aumentato di $\bigO{(log\ P)}$; dove $P$ è il numero di processori.
+	\begin{itemize}
+		\item Dimostrazione a voce
+	\end{itemize}
+\end{frame}
+
 \subsection{Algoritmo Ottimale}
+
+\begin{frame}
+	\frametitle{Parallel Random-Access Machine :: Algoritmo Ottimale} % Table of contents slide, comment this block out to remove it
+	
+	\begin{block}{Definizione}
+	$polylog(n) = \bigcup_{k>0}\bigO{(log^k n)}$\\
+	Sia $S$ un programma sequenziale che opera in tempo $T(n)$.\\
+	\end{block}
+	Diremo che il programma $A$ di una $PRAM$ per $S$ che opera in tempo $t(n)$ con $p(n)$ processori è ottimale se:
+	\begin{itemize}
+		\item $t(n) = polylog(n)$
+		\item $w(n) = p(n)\times t(n) = \bigO{(T(n))}$
+	\end{itemize}
+	
+\end{frame}
 
 \section{Modello Circuiti}
 \subsection{Definizioni}
