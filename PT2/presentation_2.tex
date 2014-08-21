@@ -129,6 +129,7 @@ Università di Udine \\ % Your institution for the title page
 	\begin{itemize}
 		\item $VLSI$: Attenzione ai limiti fisici dei processori
 		\item $PRAM$: Modello teorico non implementabile che non considera i problemi di comunicazione
+		\item $Circuiti$: Lo stesso modello visto a lezione può essere usato per lo studio di algoritmi paralleli
 	\end{itemize}
 \end{frame}
 
@@ -198,16 +199,122 @@ Università di Udine \\ % Your institution for the title page
 		\item $t(n) = polylog(n)$
 		\item $w(n) = p(n)\times t(n) = \bigO{(T(n))}$
 	\end{itemize}
+	Identifichiamo il lavoro eseguito da una $PRAM$ con la coppia $(w(t),t(n))$
+\end{frame}
+
+\subsection{Classe $NC$}
+\begin{frame}
+	\frametitle{Parallel Random-Access Machine :: Classe $NC$} % Table of contents slide, comment this block out to remove it
+	Possiamo definire una classe per gli algoritmi paralleli chiamata $NC$ dove:
+	\begin{equation}
+		NC = \bigcup_{k>0} CRCW(n^k,\log^k n))
+	\end{equation}
+	e dal fatto che i vari modelli di $PRAM$ sono correlati da un fattore logaritmico: 
+	\begin{equation}
+	NC = \bigcup_{k>0} PRAM(n^k,\log^k n))
+	\end{equation}
+	Vengono anche definite sotto-classi di $NC$ nel seguente modo:
+	\begin{equation}
+	NC_j = \bigcup_{k>0} PRAM(n^k,\log^j n))
+	\end{equation}
+	Rimane ancora aperto il problema $NC \stackrel{?}{=} P$
 	
 \end{frame}
 
+
 \section{Modello Circuiti}
 \subsection{Definizioni}
+\begin{frame}
+	\frametitle{Circuiti :: Definizioni} % Table of contents slide, comment this block out to remove it
+	
+	\begin{block}{Definizione}
+		Un circuito è un grafo etichettato aciclico (DAG). Le etichette dei nodi possono essere input, costanti, AND, OR, NOT oppure output.\\ 
+		Input e costanti hanno 0 archi in ingresso, output e NOT 1, mentre AND e OR 2. I nodi di output hanno 0 archi in uscita.
+	\end{block}
+	\begin{block}{Definizione}
+		Sia $B = \{0,1\}$. Un circuito con $n$ input e $m$ output calcola la funzione $f\colon \mathbb{B}^n\to\mathbb{B}^m$. Si suppone che l'input sia ordinato e così l'output.
+	\end{block}
+	\begin{block}{Definizione}
+		La \emph{profondità} di un circuito è la lunghezza del più lungo cammino da un nodo di input ad uno di output.\\
+		La $dimensione$ di un circuito è il numero di nodi che lo compongono 
+	\end{block}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Circuiti :: Definizioni} % Table of contents slide, comment this block out to remove it
+	
+	\begin{block}{Definizione}
+		Una famiglia di circuiti $C = \{C_i\}, i=1,2,\dots$ dove ogni $C_i$ ha esattamente $i$ input e $\ell(i)$ output.\\
+		La famiglia $C$ di circuiti risolve un problema $P$ se la funzione compiuta da $C_i$ produce la stessa trasduzione di $P$ sulla stringa di input lunga $i$
+	\end{block}
+	\begin{block}{Definizione}
+		Una famiglia di circuiti $C$ è \emph{logspace uniforme} se il circuito $C_n$ può essere generato da una macchina di Turing in spazio $\bigO{(\log n)}$
+	\end{block}
+	\begin{block}{Definizione classe CKT}
+		Per $C(n) \geq n$ e $D(n) \geq n$ indichiamo con $CKT(C(n),D(n))$ la classe dei circuiti $C = \{C_n\}$ \emph{logspace uniforme} che risolve il problema $P$ con dimensione $\bigO{(C(n))}$ e profondità $\bigO{(D(n))}$
+	\end{block}
+\end{frame}
+
+
 \subsection{Relazioni con $PRAM$}
-\subsection{Classe $NC$}
-\subsection{SottoClassi $NC^k$}
+
+\begin{frame}
+	\frametitle{Circuiti :: Unbounded} % Table of contents slide, comment this block out to remove it
+	\begin{block}{Definizione}
+		$Unbounded\ fan-in\ circuit $: rimuoviamo la restrizione sul numero di input per i nodi AND e OR\\
+		Hanno una correlazione polinomiale con i cricuiti classici, possiamo convertire ogni nodo con un albero fatto da nodi con 2 input
+	\end{block}
+	\begin{itemize}
+		\item Come per i circuiti classici possiamo dare la definizione della Classe UCKT
+		\item Se $P \in UCKT(p(n),d(n)) \Longrightarrow P \in CKT(p(n),d(n) \times \log p(n))$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Circuiti :: Relazioni con $PRAM$} % Table of contents slide, comment this block out to remove it
+	Dato un circuito $C \in UCKT(S(n),D(n))$ lo possiamo simulare con una $CRCW$ in tempo $\bigO{(D(n))}$ e con $S(n)$ processori usando $n + M(n)$ locazioni di memoria.
+	\begin{block}{Dimostrazione}
+		\begin{itemize}
+			\item Portiamo i nodi NOT sugli input (cheat)
+			\item I processori corrispondono agli archi del grafo, le locazioni di memoria ai nodi
+			\item L'input è dalla locazione 1 alla $n$, le locazioni $n+i$ con $i\in\{1\dots M(n)\}$ sono inizializzate con 0 se OR e 1 se AND
+			\item Ad ogni passo, il processore $p$ determina il valore corrente $c$ sull'arco $e=(u,v)$ leggendo la locazione $n+u$
+			\item Se $c=0 \wedge v=$  OR, oppure $c=1 \wedge v=$ AND $\Longrightarrow$ scrive il valore di $c$ nella locazione $n+v$ eseguendo la relativa operazione
+			\item Se $c=1 \wedge v=$  OR, oppure $c=0 \wedge v=$ AND $\Longrightarrow$ scrive il valore di $c$ nella locazione $n+v$
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Circuiti :: Relazioni con $PRAM$} % Table of contents slide, comment this block out to remove it
+	La dimostrazione inversa invece prevede di fornire un circuito per ogni operazione di una RAM.
+	I circuiti, per come si è potuto vedere durante il laboratorio di programmazione, sono tutti a profondità costante.
+	Ne consegue quindi:
+	\begin{equation}
+		CRCW(P(n),T(n)) \subseteq UCKT(poly(P(n)), T(n))
+	\end{equation}
+	Dove $poly(n) = \bigcup_{k>0} n^k$
+\end{frame}
 
 \section{Macchine di Turing Alternate}
+\begin{frame}
+	\frametitle{Macchine di Turing Alternate} % Table of contents slide, comment this block out to remove it
+	\begin{itemize}
+		\item Derivano dalla teoria degli automi alternati
+		\item Sono una generalizzazione delle MdT non deterministiche
+		\item Ogni stato è esistenzione oppure universale
+	\end{itemize}
+	A partire da uno configurazione $\alpha$ possiamo dire che è di accetazione se:
+	\begin{itemize}
+		\item Se $\alpha$ è \textbf{esistenziale} allora esiste una computazione che porta ad una configurazione $yes$
+		\item Se $\alpha$ è \textbf{universale} allora tutte le computazioni a partire da $\alpha$ arrivano ad una configurazione $yes$
+	\end{itemize}
+	Si dimostra che: $ATM(S(n),T(n)) \subseteq CKT(c^{S(n)},T(n))$ con $ATM(S(n),T(n))$ la classe delle macchine di Turing alternate che operano in spazio $\bigO{(S(n))}$ e tempo $\bigO{(T(n))}$.\\
+	Un ulteriore risultato è: $NC = ATM(\log n,polylog(n))$
+
+	
+\end{frame}
 
 \section{Problemi}
 \subsection{Matrix Multiplication}

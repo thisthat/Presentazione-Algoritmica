@@ -1,0 +1,15 @@
+VLSI è un modello molto vicino all'hw dove si tengono conto di vari fattori come il n° di processori, quanti processori vicini ho, metodi di comunicazione etc..
+Il modello della PRAM incece si concentra sul studiare problemi rimuovendo gli inconvenienti della comunicazione.
+Molti algoritmi reali vengono derivati da algoritmi pensati per le PRAM.
+Il numero di processori non è costante, è invece in funzione dell'input. In un primo momento può sembrare un grosso rilassamento del modello rispetto al mondo reale, ma il principio di brenth ci mostra che l'allocamento di un numero arbritario di processori non è un problema.
+[Leggi le slide per il principio di brenth]
+Le PRAM sono una estensione del modello delle RAM, dove si introduce un registro accumulatore che è r/w anche da altre RAM.
+Ogni RAM in un passo può r/w sulla propria memoria o su quella globale oppure eseguire una operazione.
+Un programma PRAM è fatto da q RAM dove q è in funzione del numero di input e dalla loro grandezza.
+Visto che più RAM possono r/w nella stessa cella, possiamo imporre 3 diverse tipologie: [leggi le slide per le tipologie], per le CRCW in particolare, la gestione dei conflitti in scrittura avviene con i 3 classici metodi: [leggi slide].
+L'ordine con le quali le varie PRAM sono state presentate è anche l'ordine della loro potenza, in ongi caso vale ancora la tesi di church-turing estesa e i vari modelli sono correlati da un fattore logaritmico. 
+Una CRCW Priority può essere simulata da una EREW (con stesso n° di processori) con un aggravio di tempo parallelo di log P, con P numero di processori.
+La dimostrazione è semplice, siano P_1 ... P_r i processori e M_1 ... M_s le locazioni di memoria usate dalla CRCW, la simulazione su EREW usa r nuove locazioni N_1 ... N_r per simulare uno step della CRCW.
+Se il processore i-esimo deve scrivere nella locazione M j-esima, nella simulazione scriverà in locazione N_i il valore pair(j,i), dove pair è la funzione di biezione di kantor.Ora si ordinano lexicograficamente le locazioni N_1 .. N_r in tempo O(log r), si esegue la proiezione del valore dei registri sulla seconda componente e si ha facilmente il valore del registro che può scrivere.
+Se per una macchina di turing, un algoritmo era efficente se è il suo calcolo è una funzione polinomiale dell'input, ora l'efficenza è diversa.
+Se definiamo la classe polilogaritmica n come l'unione al variare di k positivo di (log n) alla k e prendiamo un programma sequenziale che opera in al più T(n) passi; ora possiamo dire che un algoritmo parallelo A dove ogni processore esegue t(n) operazioni e ci sono al più p(n) processori, è ottimale se: t(n) = polilogaritmica(n) e il lavoro totale, ovvero la somma del lavoro eseguito da tutti i processori è O(T(n))
