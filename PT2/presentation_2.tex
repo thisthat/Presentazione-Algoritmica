@@ -89,6 +89,7 @@
 \newcommand{\bigO}{\ensuremath{\mathcal{O}}} % O assintotica
 \newcommand{\bigT}{\ensuremath{\Theta}} % Theta Assintotica
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil} % Ceil
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor} % Ceil
 
 \renewcommand{\algorithmicforall}{\textbf{foreach}} %forall -> foreach
 
@@ -318,15 +319,74 @@ Università di Udine \\ % Your institution for the title page
 
 \section{Problemi}
 \subsection{Matrix Multiplication}
-\subsection{Reachability}
-\subsection{Prefix Sum}
 
 \begin{frame}
-\frametitle{Paragraphs of Text}
+\frametitle{Problemi :: Matrix Multiplication} % Table of contents slide, comment this block out to remove it
+\begin{itemize}
+	\item Siano $A$ e $B$ due matrici $n \times n$, dobbiamo calcolare $C = \sum_{k=1}^{n}A_{i,k}\cdot B_{k,j},\ \ i,j=1,\dots,n$
+	\item Sequenzialmente il problema può essere risolto in $\bigO{(n^3)}$
+	\item Usiamo $n^3$ processori; ogn'uno può essere identificato da una tripla $(i,k,j)$
+	\item Organizziamo in un albero le varie somme
+\end{itemize}
+Eseguiamo un primo passo dove ogni processore svolge la sua moltiplicazione e poi eseguiamo le $\log n$ somme.\\
+Al passo $s$ il processore $(i,2^s \floor{ \frac{k}{2^s} },j)$ computa la somma della sua moltiplicazione con quella del processore $(i,2^s \floor{ \frac{k}{2^s} + 2^s},j)$.
+In totale abbiamo $\ceil{\log n} - 1$ somme e il risultato si troverà sui processori $(i,1,j)$
+
 \end{frame}
 
+\subsection{Reachability}
 
+\begin{frame}
+	\frametitle{Problemi :: Reachability} % Table of contents slide, comment this block out to remove it
+	Il problema in un primo approccio non sembra parallelizzabile, infatti per riuscirci bisogna abbandonare il classico metodo con il quale ci si approccia al problema.\\
+	Consideriamo la matrice di adiacenza $A$ come una matrice booleana, dove mettiamo un selfloop su tutti i nodi: $A_{i,i} = 1$\\
+	Computando ora $A^2 = A\cdot A$ abbiamo che $A_{i,j}^2 = \bigvee_{k=1}^n A_{i,k} \wedge A_{k,j}$, o meglio $A_{i,j} = 1 $ sse esiste un percorso di lunghezza al massimo 2 da $i$ a $j$.\\
+		
+\end{frame}
 
+\begin{frame}
+	\frametitle{Problemi :: Reachability} % Table of contents slide, comment this block out to remove it
+
+	Se computiamo per $\ceil{\log n}$ il prodotto, otteniamo la matrice $A^{2^{\ceil{\log n}}}$ che corrisponde alla chiusura transitiva di $A$ che corrisponde alla risposta di tutte le possibili istanze di Reachability.\\
+	In conclusione:
+	\begin{itemize}
+		\item $\log n$ moltiplicazioni e quindi $\bigO{(\log^2 n)}$ lavoro per processore
+		\item $n^3$ processori neccessari, dovuto a \emph{Matrix Multiplication}
+	\end{itemize}
+	
+\end{frame}
+
+\subsection{Prefix Sum}
+\begin{frame}
+	\frametitle{Problemi :: Prefix Sum} % Table of contents slide, comment this block out to remove it
+	
+	Dato un array di $n$ elementi $x = [x_1,\dots,x_n]$ si vuole calcolare\\ $\sum_{i=2}^{j} x_i$ per $j=1,\dots,n$\\
+	Per computare le varie somme con un algoritmo parallelo, come prima cosa eseguiamo le seguenti somme: $(x_1 + x_2),\dots,(x_{n-1} + x_n)$.\\
+	In questo modo otteniamo un nuovo vettore $y$ fatto da $\ceil{\frac{n}{2}}$ elementi.\\
+	Possiamo riapplicare il ragionamento fino ad ottenere un unico elemento, in questo modo otteniamo la somma di tutti gli elementi in posizione pari.\\
+	Ora, per computare le dispari eseguiamo un primo passo di somme: $x_1,(x_2+x_3), \dots$\\
+	Al nuovo vettore appena ricavato applichiamo l'algoritmo visto prima.
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Problemi :: Prefix Sum} % Table of contents slide, comment this block out to remove it
+	
+	
+	L'algoritmo ha la seguente equazione ricorsiva:
+	\begin{equation}
+	T(n) = T\left(\frac{n}{2}\right) + \bigO{(1)}
+	\end{equation}
+	Di conseguenza l'algoritmo impiega tempo $\bigO{(\log n)}$ e $n$ processori.
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{ $\ $} % Table of contents slide, comment this block out to remove it
+	
+\Huge{\centerline{Fine}}
+	
+\end{frame}
 %----------------------------------------------------------------------------------------
 %	PRESENTATION SLIDES
 %----------------------------------------------------------------------------------------
