@@ -142,7 +142,7 @@ Università di Udine \\ % Your institution for the title page
 	\begin{itemize}
 		\item Supponiamo di avere $x_i$ operazioni ad ogni passo $i$
 		\item Il numero di processori necessario è $d = max\ x_i$
-		\item Possediamo solo $p<m$ processori
+		\item Possediamo solo $p<d$ processori
 		\item Possiamo simulare la computazione originaria con $p$ processori in $\ceil{x_i / p}$ passi ad ogni $i$-esimo step
 		\item In totale la simulazione viene eseguita in $\ceil{ \frac{\sum_i x_i}{p}    } + t$ passi
 	\end{itemize}
@@ -186,6 +186,26 @@ Università di Udine \\ % Your institution for the title page
 	\end{itemize}
 \end{frame}
 
+
+\subsection{Classe $NC$}
+\begin{frame}
+	\frametitle{Parallel Random-Access Machine :: Classe $NC$} % Table of contents slide, comment this block out to remove it
+	Possiamo definire una classe per gli algoritmi paralleli chiamata $NC$ dove:
+	\begin{equation}
+		NC = \bigcup_{k>0} CRCW(n^k,\log^k n))
+	\end{equation}
+	e dal fatto che i vari modelli di $PRAM$ sono correlati da un fattore logaritmico: 
+	\begin{equation}
+		NC = \bigcup_{k>0} PRAM(n^k,\log^k n))
+	\end{equation}
+	Vengono anche definite sotto-classi di $NC$ nel seguente modo:
+	\begin{equation}
+		NC_j = \bigcup_{k>0} PRAM(n^k,\log^j n))
+	\end{equation}
+	Rimane ancora aperto il problema $NC \stackrel{?}{=} P$
+	
+\end{frame}
+
 \subsection{Algoritmo Ottimale}
 
 \begin{frame}
@@ -203,24 +223,6 @@ Università di Udine \\ % Your institution for the title page
 	Identifichiamo il lavoro eseguito da una $PRAM$ con la coppia $(w(t),t(n))$
 \end{frame}
 
-\subsection{Classe $NC$}
-\begin{frame}
-	\frametitle{Parallel Random-Access Machine :: Classe $NC$} % Table of contents slide, comment this block out to remove it
-	Possiamo definire una classe per gli algoritmi paralleli chiamata $NC$ dove:
-	\begin{equation}
-		NC = \bigcup_{k>0} CRCW(n^k,\log^k n))
-	\end{equation}
-	e dal fatto che i vari modelli di $PRAM$ sono correlati da un fattore logaritmico: 
-	\begin{equation}
-	NC = \bigcup_{k>0} PRAM(n^k,\log^k n))
-	\end{equation}
-	Vengono anche definite sotto-classi di $NC$ nel seguente modo:
-	\begin{equation}
-	NC_j = \bigcup_{k>0} PRAM(n^k,\log^j n))
-	\end{equation}
-	Rimane ancora aperto il problema $NC \stackrel{?}{=} P$
-	
-\end{frame}
 
 
 \section{Modello Circuiti}
@@ -233,7 +235,7 @@ Università di Udine \\ % Your institution for the title page
 		Input e costanti hanno 0 archi in ingresso, output e NOT 1, mentre AND e OR 2. I nodi di output hanno 0 archi in uscita.
 	\end{block}
 	\begin{block}{Definizione}
-		Sia $B = \{0,1\}$. Un circuito con $n$ input e $m$ output calcola la funzione $f\colon \mathbb{B}^n\to\mathbb{B}^m$. Si suppone che l'input sia ordinato e così l'output.
+		Sia $\mathbb{B} = \{0,1\}$. Un circuito con $n$ input e $m$ output calcola la funzione $f\colon \mathbb{B}^n\to\mathbb{B}^m$. Si suppone che l'input sia ordinato e così l'output.
 	\end{block}
 	\begin{block}{Definizione}
 		La \emph{profondità} di un circuito è la lunghezza del più lungo cammino da un nodo di input ad uno di output.\\
@@ -253,7 +255,7 @@ Università di Udine \\ % Your institution for the title page
 		Una famiglia di circuiti $C$ è \emph{logspace uniforme} se il circuito $C_n$ può essere generato da una macchina di Turing in spazio $\bigO{(\log n)}$
 	\end{block}
 	\begin{block}{Definizione classe CKT}
-		Per $C(n) \geq n$ e $D(n) \geq n$ indichiamo con $CKT(C(n),D(n))$ la classe dei circuiti $C = \{C_n\}$ \emph{logspace uniforme} che risolve il problema $P$ con dimensione $\bigO{(C(n))}$ e profondità $\bigO{(D(n))}$
+		Per $C(n) \geq n$ e $D(n) \geq n$ indichiamo con $CKT(C(n),D(n))$ la classe dei circuiti $C$ \emph{logspace uniforme} che risolve il problema $P$ con dimensione $\bigO{(C(n))}$ e profondità $\bigO{(D(n))}$
 	\end{block}
 \end{frame}
 
@@ -264,7 +266,7 @@ Università di Udine \\ % Your institution for the title page
 	\frametitle{Circuiti :: Unbounded} % Table of contents slide, comment this block out to remove it
 	\begin{block}{Definizione}
 		$Unbounded\ fan-in\ circuit $: rimuoviamo la restrizione sul numero di input per i nodi AND e OR\\
-		Hanno una correlazione polinomiale con i cricuiti classici, possiamo convertire ogni nodo con un albero fatto da nodi con 2 input
+		Hanno una correlazione logaritmica con i cricuiti classici, possiamo convertire ogni nodo con un albero fatto da nodi con 2 input
 	\end{block}
 	\begin{itemize}
 		\item Come per i circuiti classici possiamo dare la definizione della Classe UCKT
@@ -274,7 +276,7 @@ Università di Udine \\ % Your institution for the title page
 
 \begin{frame}
 	\frametitle{Circuiti :: Relazioni con $PRAM$} % Table of contents slide, comment this block out to remove it
-	Dato un circuito $C \in UCKT(S(n),D(n))$ lo possiamo simulare con una $CRCW$ in tempo $\bigO{(D(n))}$ e con $S(n)$ processori usando $n + M(n)$ locazioni di memoria.
+	Dato un circuito $C \in UCKT(S(n),D(n))$ lo possiamo simulare con una $CRCW$ in tempo $\bigO{(D(n))}$ e con $S(n)$ processori usando $n + M(n)$ locazioni di memoria,dove $M(n)$ è il numero di \emph{gates}.
 	\begin{block}{Dimostrazione}
 		\begin{itemize}
 			\item Portiamo i nodi NOT sugli input (cheat)
@@ -360,7 +362,7 @@ In totale abbiamo $\ceil{\log n} - 1$ somme e il risultato si troverà sui proce
 \begin{frame}
 	\frametitle{Problemi :: Prefix Sum} % Table of contents slide, comment this block out to remove it
 	
-	Dato un array di $n$ elementi $x = [x_1,\dots,x_n]$ si vuole calcolare\\ $\sum_{i=2}^{j} x_i$ per $j=1,\dots,n$\\
+	Dato un array di $n$ elementi $x = [x_1,\dots,x_n]$ si vuole calcolare\\ $\sum_{i=1}^{j} x_i$ per $j=2,\dots,n$\\
 	Per computare le varie somme con un algoritmo parallelo, come prima cosa eseguiamo le seguenti somme: $(x_1 + x_2),\dots,(x_{n-1} + x_n)$.\\
 	In questo modo otteniamo un nuovo vettore $y$ fatto da $\ceil{\frac{n}{2}}$ elementi.\\
 	Possiamo riapplicare il ragionamento fino ad ottenere un unico elemento, in questo modo otteniamo la somma di tutti gli elementi in posizione pari.\\
