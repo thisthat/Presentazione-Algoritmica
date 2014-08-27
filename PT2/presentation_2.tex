@@ -186,6 +186,23 @@ Università di Udine \\ % Your institution for the title page
 	\end{itemize}
 \end{frame}
 
+\subsection{Algoritmo Ottimale}
+
+\begin{frame}
+	\frametitle{Parallel Random-Access Machine :: Algoritmo Ottimale} % Table of contents slide, comment this block out to remove it
+	
+	\begin{block}{Definizione}
+		$polylog(n) = \bigcup_{k>0}\bigO{(log^k n)}$\\
+		Sia $S$ un programma sequenziale che opera in tempo $T(n)$.\\
+	\end{block}
+	Diremo che il programma $A$ di una $PRAM$ per $S$ che opera in tempo $t(n)$ con $p(n)$ processori è ottimale se:
+	\begin{itemize}
+		\item $t(n) = polylog(n)$
+		\item $w(n) = p(n)\times t(n) = \bigO{(T(n))}$
+	\end{itemize}
+	Identifichiamo il lavoro eseguito da una $PRAM$ con la coppia $(w(t),t(n))$
+\end{frame}
+
 
 \subsection{Classe $NC$}
 \begin{frame}
@@ -206,22 +223,7 @@ Università di Udine \\ % Your institution for the title page
 	
 \end{frame}
 
-\subsection{Algoritmo Ottimale}
 
-\begin{frame}
-	\frametitle{Parallel Random-Access Machine :: Algoritmo Ottimale} % Table of contents slide, comment this block out to remove it
-	
-	\begin{block}{Definizione}
-	$polylog(n) = \bigcup_{k>0}\bigO{(log^k n)}$\\
-	Sia $S$ un programma sequenziale che opera in tempo $T(n)$.\\
-	\end{block}
-	Diremo che il programma $A$ di una $PRAM$ per $S$ che opera in tempo $t(n)$ con $p(n)$ processori è ottimale se:
-	\begin{itemize}
-		\item $t(n) = polylog(n)$
-		\item $w(n) = p(n)\times t(n) = \bigO{(T(n))}$
-	\end{itemize}
-	Identifichiamo il lavoro eseguito da una $PRAM$ con la coppia $(w(t),t(n))$
-\end{frame}
 
 
 
