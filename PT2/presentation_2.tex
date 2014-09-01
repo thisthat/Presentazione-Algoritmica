@@ -200,7 +200,7 @@ Università di Udine \\ % Your institution for the title page
 		\item $t(n) = polylog(n)$
 		\item $w(n) = p(n)\times t(n) = \bigO{(T(n))}$
 	\end{itemize}
-	Identifichiamo il lavoro eseguito da una $PRAM$ con la coppia $(w(t),t(n))$
+	Identifichiamo il lavoro eseguito da una $PRAM$ con la coppia $(p(t),t(n))$
 \end{frame}
 
 
@@ -344,7 +344,7 @@ In totale abbiamo $\ceil{\log n} - 1$ somme e il risultato si troverà sui proce
 	\frametitle{Problemi :: Reachability} % Table of contents slide, comment this block out to remove it
 	Il problema in un primo approccio non sembra parallelizzabile, infatti per riuscirci bisogna abbandonare il classico metodo con il quale ci si approccia al problema.\\
 	Consideriamo la matrice di adiacenza $A$ come una matrice booleana, dove mettiamo un selfloop su tutti i nodi: $A_{i,i} = 1$\\
-	Computando ora $A^2 = A\cdot A$ abbiamo che $A_{i,j}^2 = \bigvee_{k=1}^n A_{i,k} \wedge A_{k,j}$, o meglio $A_{i,j} = 1 $ sse esiste un percorso di lunghezza al massimo 2 da $i$ a $j$.\\
+	Computando ora $A^2 = A\cdot A$ abbiamo che $A_{i,j}^2 = \bigvee_{k=1}^n A_{i,k} \wedge A_{k,j}$, o meglio $A^2_{i,j} = 1 $ sse esiste un percorso di lunghezza al massimo 2 da $i$ a $j$.\\
 		
 \end{frame}
 
